@@ -1,0 +1,14 @@
+{
+  "name": "career-returnship-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:api": "cd apps/api && npm run dev",
+    "dev:prototype": "cd apps/prototype && npm run dev",
+    "dev:production": "cd apps/production && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Career Returnship AI — Women's Day MVP"
+}

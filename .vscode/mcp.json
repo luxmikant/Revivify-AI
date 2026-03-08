@@ -1,0 +1,10 @@
+{
+	"servers": {
+		"clerk": {
+			"type": "stdio",
+			"command": "https://mcp.clerk.dev/mcp",
+			"args": []
+		}
+	},
+	"inputs": []
+}
