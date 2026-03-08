@@ -1,9 +1,4 @@
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
-const __filename = fileURLToPath(import.meta.url);
-const __rootDir = resolve(dirname(__filename), "../../..");
-dotenv.config({ path: resolve(__rootDir, ".env") });
+// Environment is loaded by --env-file at the Node CLI level (see package.json scripts)
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";

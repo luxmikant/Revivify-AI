@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} antialiased min-h-screen bg-gradient-to-br from-slate-950 via-violet-950 to-slate-950 text-white`}
+        className={`${geistSans.variable} antialiased min-h-screen bg-gradient-to-br from-slate-950 via-rose-950 to-slate-950 text-white`}
       >
         <ClerkProvider afterSignOutUrl="/">
           {children}

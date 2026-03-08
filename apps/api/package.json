@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "node --env-file=../../.env --dns-result-order=verbatim --import tsx/esm --watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node --env-file=../../.env --dns-result-order=verbatim --import tsx/esm src/server.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "@langchain/core": "^0.3.0",
     "@langchain/google-genai": "^0.2.0",
     "@langchain/langgraph": "^0.2.0",
+    "@supabase/supabase-js": "^2.98.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.0",
     "express": "^4.21.0",

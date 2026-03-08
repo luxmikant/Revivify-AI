@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { requireAuth } from "../middleware/auth.js";
-import { pool } from "../lib/supabase.js";
+import { supabase } from "../lib/supabase.js";
 
 export const historyRouter = Router();
 
@@ -13,19 +13,19 @@ historyRouter.get("/history", requireAuth(), async (req, res) => {
       return;
     }
 
-    const { rows } = await pool.query(
-      `SELECT id, created_at, jd_title, result->>'ats_score' AS ats_score
-       FROM analyses
-       WHERE clerk_user_id = $1
-       ORDER BY created_at DESC`,
-      [clerkUserId]
-    );
+    const { data, error } = await supabase
+      .from("analyses")
+      .select("id, created_at, jd_title, result")
+      .eq("clerk_user_id", clerkUserId)
+      .order("created_at", { ascending: false });
 
-    const analyses = rows.map((row: any) => ({
+    if (error) throw error;
+
+    const analyses = (data || []).map((row: any) => ({
       id: row.id,
       created_at: row.created_at,
       jd_title: row.jd_title,
-      ats_score: Number(row.ats_score),
+      ats_score: Number(row.result?.ats_score ?? 0),
     }));
 
     res.json({ analyses });
@@ -44,17 +44,18 @@ historyRouter.get("/history/:id", requireAuth(), async (req, res) => {
       return;
     }
 
-    const { rows } = await pool.query(
-      `SELECT * FROM analyses WHERE id = $1 AND clerk_user_id = $2`,
-      [req.params.id, clerkUserId]
-    );
+    const { data, error } = await supabase
+      .from("analyses")
+      .select("*")
+      .eq("id", req.params.id)
+      .eq("clerk_user_id", clerkUserId)
+      .single();
 
-    if (!rows[0]) {
+    if (error || !data) {
       res.status(404).json({ error: "NOT_FOUND" });
       return;
     }
 
-    const data = rows[0];
     res.json({
       id: data.id,
       created_at: data.created_at,

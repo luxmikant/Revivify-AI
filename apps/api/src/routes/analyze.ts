@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { requireAuth } from "../middleware/auth.js";
 import { analysisGraph } from "../agents/graph.js";
-import { pool } from "../lib/supabase.js";
+import { supabase } from "../lib/supabase.js";
 import { analyzeRequestSchema } from "../../../../packages/shared/src/schemas.js";
 
 export const analyzeRouter = Router();
@@ -45,16 +45,22 @@ analyzeRouter.post("/analyze", requireAuth(), async (req, res) => {
     // Extract JD title from the parsed JD
     const jdTitle = result.parsedJD?.title || "Untitled Position";
 
-    // Save to Postgres
+    // Save to Supabase
     let analysisId = crypto.randomUUID();
     try {
-      const { rows } = await pool.query(
-        `INSERT INTO analyses (clerk_user_id, resume_text, jd_text, jd_title, result)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id`,
-        [clerkUserId, resumeText, jdText, jdTitle, JSON.stringify(analysisResult)]
-      );
-      if (rows[0]) analysisId = rows[0].id;
+      const { data, error } = await supabase
+        .from("analyses")
+        .insert({
+          clerk_user_id: clerkUserId,
+          resume_text: resumeText,
+          jd_text: jdText,
+          jd_title: jdTitle,
+          result: analysisResult,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      if (data) analysisId = data.id;
     } catch (dbErr) {
       console.error("DB insert error (non-fatal):", dbErr);
     }

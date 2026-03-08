@@ -8,9 +8,9 @@ export default async function LandingPage() {
   if (userId) redirect("/analyze");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-950 to-gray-950 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-rose-950 to-gray-950 text-white">
       <header className="flex items-center justify-between px-8 py-6">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-rose-400 to-amber-400 bg-clip-text text-transparent">
           Career Returnship AI
         </h1>
       </header>
@@ -19,7 +19,7 @@ export default async function LandingPage() {
         <div className="text-center max-w-3xl mb-16">
           <h2 className="text-5xl font-extrabold leading-tight mb-6">
             Your Career Break is a{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-rose-400 to-amber-400 bg-clip-text text-transparent">
               Superpower
             </span>
           </h2>
@@ -31,14 +31,14 @@ export default async function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mb-16">
           <div className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
-            <Target className="w-8 h-8 text-purple-400 mb-4" />
+            <Target className="w-8 h-8 text-rose-400 mb-4" />
             <h3 className="text-lg font-semibold mb-2">ATS Score Analysis</h3>
             <p className="text-gray-400 text-sm">
               See how your resume scores against job descriptions with actionable keyword insights.
             </p>
           </div>
           <div className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
-            <Brain className="w-8 h-8 text-pink-400 mb-4" />
+            <Brain className="w-8 h-8 text-amber-400 mb-4" />
             <h3 className="text-lg font-semibold mb-2">Hidden Strengths</h3>
             <p className="text-gray-400 text-sm">
               Discover transferable skills gained during career breaks that employers value.

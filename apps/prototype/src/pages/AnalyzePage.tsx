@@ -117,7 +117,7 @@ export default function AnalyzePage() {
         <button
           onClick={handleAnalyze}
           disabled={stage !== "input"}
-          className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 text-white font-semibold hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-semibold hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send size={16} /> Analyze My Resume
         </button>

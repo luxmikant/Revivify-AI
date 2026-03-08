@@ -68,7 +68,7 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-950 to-gray-950 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-rose-950 to-gray-950 text-white">
       <Navbar />
       <main className="max-w-5xl mx-auto px-4 py-8">
         {stage === "scanning" && <ScanAnimation />}
@@ -119,7 +119,7 @@ export default function AnalyzePage() {
             <div className="flex justify-center">
               <button
                 onClick={handleAnalyze}
-                className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 text-white font-semibold hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-semibold hover:brightness-110 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send size={16} /> Analyze My Resume
               </button>

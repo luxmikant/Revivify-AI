@@ -14,17 +14,17 @@ export default function ScanAnimation() {
       {/* Pulsing ring */}
       <div className="relative w-24 h-24">
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-violet-400"
+          className="absolute inset-0 rounded-full border-4 border-rose-400"
           animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0.2, 0.8] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
         <motion.div
-          className="absolute inset-2 rounded-full border-4 border-pink-400"
+          className="absolute inset-2 rounded-full border-4 border-amber-400"
           animate={{ scale: [1, 1.2, 1], opacity: [0.6, 0.3, 0.6] }}
           transition={{ duration: 2, delay: 0.3, repeat: Infinity }}
         />
         <motion.div
-          className="absolute inset-4 rounded-full bg-gradient-to-br from-violet-600 to-pink-600"
+          className="absolute inset-4 rounded-full bg-gradient-to-br from-rose-600 to-amber-500"
           animate={{ scale: [0.9, 1.05, 0.9] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         />

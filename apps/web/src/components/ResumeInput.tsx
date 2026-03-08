@@ -39,7 +39,7 @@ export default function ResumeInput({
 
   return (
     <div className="space-y-3">
-      <label className="block text-sm font-semibold text-violet-300">
+      <label className="block text-sm font-semibold text-rose-300">
         Resume
       </label>
 
@@ -47,14 +47,14 @@ export default function ResumeInput({
         {...getRootProps()}
         className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
           isDragActive
-            ? "border-violet-400 bg-violet-400/10"
-            : "border-white/20 hover:border-violet-400/50"
+            ? "border-rose-400 bg-rose-400/10"
+            : "border-white/20 hover:border-rose-400/50"
         }`}
       >
         <input {...getInputProps()} />
         {file ? (
           <div className="flex items-center justify-center gap-2 text-sm text-slate-300">
-            <FileText size={18} className="text-violet-400" />
+            <FileText size={18} className="text-rose-400" />
             <span>{file.name}</span>
             <button
               type="button"
@@ -84,7 +84,7 @@ export default function ResumeInput({
         onChange={(e) => onTextChange(e.target.value)}
         rows={6}
         placeholder="…or paste your resume text here"
-        className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
+        className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none"
       />
     </div>
   );

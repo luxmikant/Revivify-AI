@@ -40,12 +40,12 @@ export default function HiddenStrengths({ items, summary }: Props) {
             className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1"
           >
             <p className="text-xs text-slate-500">{item.gap_period}</p>
-            <p className="text-sm text-violet-300 font-medium">
+            <p className="text-sm text-rose-300 font-medium">
               {item.hidden_strength}
             </p>
             <p className="text-xs text-slate-400">
               Mapped skill:{" "}
-              <span className="text-pink-300 font-medium">
+              <span className="text-amber-300 font-medium">
                 {item.mapped_skill}
               </span>
             </p>
