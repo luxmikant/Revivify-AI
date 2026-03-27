@@ -1,19 +1,14 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/auth.js";
+import { extractUserId } from "../middleware/auth.js";
 import { analysisGraph } from "../agents/graph.js";
 import { supabase } from "../lib/supabase.js";
 import { analyzeRequestSchema } from "../../../../packages/shared/src/schemas.js";
 
 export const analyzeRouter = Router();
 
-analyzeRouter.post("/analyze", requireAuth(), async (req, res) => {
+analyzeRouter.post("/analyze", extractUserId, async (req, res) => {
   try {
-    const auth = (req as any).auth;
-    const clerkUserId = auth?.userId;
-    if (!clerkUserId) {
-      res.status(401).json({ error: "UNAUTHORIZED", message: "Authentication required" });
-      return;
-    }
+    const clerkUserId = (req as any).clerkUserId as string;
 
     // Validate input
     const parsed = analyzeRequestSchema.safeParse(req.body);

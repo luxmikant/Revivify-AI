@@ -1,17 +1,12 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/auth.js";
+import { extractUserId } from "../middleware/auth.js";
 import { supabase } from "../lib/supabase.js";
 
 export const historyRouter = Router();
 
-historyRouter.get("/history", requireAuth(), async (req, res) => {
+historyRouter.get("/history", extractUserId, async (req, res) => {
   try {
-    const auth = (req as any).auth;
-    const clerkUserId = auth?.userId;
-    if (!clerkUserId) {
-      res.status(401).json({ error: "UNAUTHORIZED" });
-      return;
-    }
+    const clerkUserId = (req as any).clerkUserId as string;
 
     const { data, error } = await supabase
       .from("analyses")
@@ -35,14 +30,9 @@ historyRouter.get("/history", requireAuth(), async (req, res) => {
   }
 });
 
-historyRouter.get("/history/:id", requireAuth(), async (req, res) => {
+historyRouter.get("/history/:id", extractUserId, async (req, res) => {
   try {
-    const auth = (req as any).auth;
-    const clerkUserId = auth?.userId;
-    if (!clerkUserId) {
-      res.status(401).json({ error: "UNAUTHORIZED" });
-      return;
-    }
+    const clerkUserId = (req as any).clerkUserId as string;
 
     const { data, error } = await supabase
       .from("analyses")

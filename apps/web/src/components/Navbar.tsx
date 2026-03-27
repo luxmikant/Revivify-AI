@@ -3,7 +3,7 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileSearch, History } from "lucide-react";
+import { FileSearch, History, Briefcase, BadgeCheck } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -21,7 +21,7 @@ export default function Navbar() {
         href="/"
         className="text-lg font-bold bg-gradient-to-r from-rose-400 to-amber-400 bg-clip-text text-transparent"
       >
-        Career Returnship AI
+        CareerSpring Platform
       </Link>
 
       <div className="flex items-center gap-2">
@@ -30,6 +30,15 @@ export default function Navbar() {
         </Link>
         <Link href="/history" className={linkClass("/history")}>
           <History size={16} /> History
+        </Link>
+        <Link href="/job-portal" className={linkClass("/job-portal")}>
+          <Briefcase size={16} /> Job Portal
+        </Link>
+        <Link
+          href="/certificate-verification"
+          className={linkClass("/certificate-verification")}
+        >
+          <BadgeCheck size={16} /> Certificates
         </Link>
         <div className="ml-3">
           <UserButton />

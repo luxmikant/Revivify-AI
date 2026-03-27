@@ -9,9 +9,9 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Career Returnship AI",
+  title: "CareerSpring Platform",
   description:
-    "Your career gap is not a red flag — it's your superpower. AI-powered resume analysis for returning professionals.",
+    "CareerSpring Platform is a professional career development suite for resume analysis, job matching, and certificate verification.",
 };
 
 export default function RootLayout({

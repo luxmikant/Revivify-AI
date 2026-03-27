@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import pdf from "pdf-parse";
 import mammoth from "mammoth";
-import { requireAuth } from "../middleware/auth.js";
+import { extractUserId } from "../middleware/auth.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -22,7 +22,7 @@ const upload = multer({
 
 export const uploadRouter = Router();
 
-uploadRouter.post("/upload", requireAuth(), upload.single("file"), async (req, res) => {
+uploadRouter.post("/upload", extractUserId, upload.single("file"), async (req, res) => {
   try {
     const file = req.file;
     if (!file) {
