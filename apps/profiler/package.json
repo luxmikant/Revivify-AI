@@ -1,0 +1,18 @@
+{
+  "name": "@returnship/profiler",
+  "version": "1.0.0",
+  "description": "Real-time flame graph visualizer for Revivify AI",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "cors": "^2.8.5",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "node": "^20.0.0"
+  }
+}

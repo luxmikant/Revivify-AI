@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import PageTransition from "@/components/PageTransition";
+import GlobalCommandPalette from "@/components/GlobalCommandPalette";
+import GlobalAudioController from "@/components/GlobalAudioController";
+import InteractiveCursor from "@/components/InteractiveCursor";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,11 +25,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} antialiased min-h-screen bg-gradient-to-br from-slate-950 via-rose-950 to-slate-950 text-white`}
-      >
+      <body className={`${geistSans.variable} antialiased text-white bg-obsidian`}>
         <ClerkProvider afterSignOutUrl="/">
-          {children}
+          <GlobalAudioController>
+            <InteractiveCursor />
+            <GlobalCommandPalette />
+            <PageTransition>{children}</PageTransition>
+          </GlobalAudioController>
         </ClerkProvider>
       </body>
     </html>

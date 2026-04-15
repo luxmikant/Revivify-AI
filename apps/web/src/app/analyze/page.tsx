@@ -68,7 +68,7 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-rose-950 to-gray-950 text-white">
+    <div className="min-h-screen text-white">
       <Navbar />
       <main className="max-w-5xl mx-auto px-4 py-8">
         {stage === "scanning" && <ScanAnimation />}

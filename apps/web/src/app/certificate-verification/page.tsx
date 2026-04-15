@@ -131,7 +131,7 @@ export default function CertificateVerificationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-rose-950 to-gray-950 text-white">
+    <div className="min-h-screen text-white">
       <Navbar />
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
         <section className="rounded-2xl border border-white/10 bg-white/5 p-6">

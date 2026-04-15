@@ -1,6 +1,123 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #7c3aed;
-  --color-primary-light: #a78bfa;
+  --obsidian-0: #050507;
+  --obsidian-1: #09090b;
+  --obsidian-2: #111116;
+  --text-primary: #f8fafc;
+  --text-muted: #cbd5e1;
+  --radius-panel: 1rem;
+  --radius-card: 0.85rem;
+  --shadow-elevated: 0 24px 70px rgba(0, 0, 0, 0.52);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-snappy: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text-primary);
+  background: var(--obsidian-0);
+  font-family:
+    var(--font-geist-sans),
+    "Segoe UI",
+    "SF Pro Text",
+    "Inter",
+    system-ui,
+    sans-serif;
+}
+
+.bg-obsidian {
+  background: var(--obsidian-0);
+}
+
+.page-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  isolation: isolate;
+}
+
+.page-stage {
+  position: relative;
+  min-height: 100vh;
+  z-index: 1;
+}
+
+.page-bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  transition: background 500ms var(--ease-standard);
+}
+
+.page-bg-grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.19;
+  mix-blend-mode: soft-light;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.45) 0.75px, transparent 0.75px),
+    radial-gradient(circle at 0.5px 0.5px, rgba(255, 255, 255, 0.2) 0.5px, transparent 0.5px);
+  background-size: 3px 3px, 2px 2px;
+}
+
+.phase-home {
+  background:
+    radial-gradient(70% 80% at 12% 8%, rgba(190, 24, 93, 0.27), transparent 56%),
+    radial-gradient(72% 76% at 80% 4%, rgba(251, 146, 60, 0.2), transparent 62%),
+    linear-gradient(130deg, #040406, #08090c 40%, #0e1016);
+}
+
+.phase-analyze {
+  background:
+    radial-gradient(75% 84% at 14% 7%, rgba(225, 29, 72, 0.26), transparent 52%),
+    radial-gradient(66% 70% at 81% 16%, rgba(245, 158, 11, 0.18), transparent 58%),
+    linear-gradient(132deg, #040406, #0a0a10 42%, #12121b);
+}
+
+.phase-history {
+  background:
+    radial-gradient(72% 80% at 10% 4%, rgba(244, 63, 94, 0.22), transparent 56%),
+    radial-gradient(62% 72% at 82% 12%, rgba(250, 204, 21, 0.14), transparent 58%),
+    linear-gradient(132deg, #040406, #0a0b11 44%, #131521);
+}
+
+.phase-jobs {
+  background:
+    radial-gradient(70% 82% at 16% 10%, rgba(225, 29, 72, 0.2), transparent 54%),
+    radial-gradient(60% 70% at 78% 8%, rgba(251, 191, 36, 0.19), transparent 57%),
+    linear-gradient(132deg, #040406, #0b0a10 42%, #141620);
+}
+
+.phase-certificate {
+  background:
+    radial-gradient(74% 86% at 10% 6%, rgba(190, 24, 93, 0.24), transparent 53%),
+    radial-gradient(64% 74% at 84% 9%, rgba(245, 158, 11, 0.16), transparent 60%),
+    linear-gradient(132deg, #040406, #090a10 44%, #131722);
+}
+
+@media (pointer: fine) {
+  html[data-cursor="custom"],
+  html[data-cursor="custom"] * {
+    cursor: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

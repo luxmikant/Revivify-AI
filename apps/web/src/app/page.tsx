@@ -13,12 +13,13 @@ import {
   ShieldCheck,
   TrendingUp,
 } from "lucide-react";
+import TemporalBridgeHero from "@/components/TemporalBridgeHero";
 
 export default async function LandingPage() {
   const { userId } = await auth();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-rose-950 to-gray-950 text-white">
+    <div className="min-h-screen text-white">
       <header className="sticky top-0 z-10 border-b border-white/10 bg-black/20 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
           <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-rose-400 to-amber-400 bg-clip-text text-transparent">
@@ -56,49 +57,7 @@ export default async function LandingPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 pt-12 pb-20 space-y-10">
-        <section className="rounded-3xl border border-white/10 bg-[radial-gradient(circle_at_20%_20%,rgba(251,113,133,.22),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(245,158,11,.2),transparent_40%),rgba(255,255,255,.03)] p-8 md:p-12">
-          <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.22em] text-rose-300/80 mb-4">
-              Career Development Suite
-            </p>
-            <h2 className="text-4xl md:text-6xl font-extrabold leading-tight mb-5">
-              Accelerate Career Growth with
-              <span className="block bg-gradient-to-r from-rose-400 to-amber-400 bg-clip-text text-transparent">
-                Data-Driven Guidance
-              </span>
-            </h2>
-            <p className="text-slate-200/90 text-base md:text-lg max-w-2xl">
-              CareerSpring Platform helps learners and professionals improve employability through
-              resume intelligence, opportunity discovery, and verified internship records in one
-              integrated web experience.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 mt-8">
-              {userId ? (
-                <>
-                <Link
-                  href="/analyze"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-sm font-semibold hover:brightness-110 transition"
-                >
-                  Launch Dashboard <ArrowRight size={16} />
-                </Link>
-                <Link
-                  href="/job-portal"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-white/15 bg-black/25 text-sm font-semibold hover:bg-white/10 transition"
-                >
-                  Open Job Portal
-                </Link>
-                </>
-              ) : (
-                <SignInButton mode="modal">
-                  <button className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-sm font-semibold hover:brightness-110 transition">
-                    Sign In to Continue <ArrowRight size={16} />
-                  </button>
-                </SignInButton>
-              )}
-            </div>
-          </div>
-        </section>
+        <TemporalBridgeHero isSignedIn={Boolean(userId)} />
 
         <section>
           <div className="mb-4">

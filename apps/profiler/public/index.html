@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔥 Flame Graph Visualizer - Revivify AI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      animation: slideDown 0.6s ease;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ff6b9d 0%, #ffa500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 1.1em;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      animation: slideUp 0.6s ease;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 600;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff6b9d 0%, #ffa500 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+    }
+
+    .btn-secondary {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background: #475569;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 107, 157, 0.2);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .stat-card h3 {
+      color: #94a3b8;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 2em;
+      color: #ff6b9d;
+      font-weight: bold;
+    }
+
+    .visualization-container {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 107, 157, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      min-height: 600px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease 0.2s backwards;
+    }
+
+    #canvas {
+      display: block;
+      width: 100%;
+      cursor: crosshair;
+    }
+
+    .canvas-info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9em;
+      color: #94a3b8;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 107, 157, 0.2);
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.9);
+      color: #ffa500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9em;
+      pointer-events: none;
+      border: 1px solid rgba(255, 165, 0, 0.3);
+      backdrop-filter: blur(5px);
+      display: none;
+      max-width: 300px;
+      word-wrap: break-word;
+      z-index: 100;
+    }
+
+    .legend {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 107, 157, 0.2);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .legend h3 {
+      margin-bottom: 15px;
+      color: #ffa500;
+    }
+
+    .legend-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      padding: 40px 60px;
+      border-radius: 12px;
+      text-align: center;
+      display: none;
+      z-index: 1000;
+      border: 2px solid rgba(255, 107, 157, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 107, 157, 0.3);
+      border-top: 4px solid #ff6b9d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .instructions {
+      background: rgba(30, 41, 59, 0.6);
+      border-left: 4px solid #ff6b9d;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .instructions strong {
+      color: #ffa500;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .visualization-container {
+        min-height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔥 Flame Graph Visualizer</h1>
+      <p>Real-time Performance Profiling for Revivify AI</p>
+    </header>
+
+    <div class="instructions">
+      <strong>📖 How to use:</strong>
+      <br />1. Click "Generate Mock Data" to see an example flame graph
+      <br />2. Hover over blocks to see function names and time
+      <br />3. Click to zoom in, double-click to reset view
+      <br />4. Use Ctrl+R to refresh with new data
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="generateMockData()">
+        📊 Generate Mock Data
+      </button>
+      <button class="btn-secondary" onclick="loadLiveData()">
+        🔗 Load Live Data
+      </button>
+      <button class="btn-secondary" onclick="resetView()">
+        ↻ Reset View
+      </button>
+      <button class="btn-secondary" onclick="downloadData()">
+        ⬇️ Download Graph
+      </button>
+      <button class="btn-secondary" onclick="toggleLegend()">
+        📋 Toggle Legend
+      </button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Total Samples</h3>
+        <div class="value" id="stat-samples">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Graph Nodes</h3>
+        <div class="value" id="stat-nodes">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Duration</h3>
+        <div class="value" id="stat-duration">0ms</div>
+      </div>
+      <div class="stat-card">
+        <h3>Zoom Level</h3>
+        <div class="value" id="stat-zoom">100%</div>
+      </div>
+    </div>
+
+    <div class="visualization-container">
+      <canvas id="canvas"></canvas>
+      <div class="canvas-info" id="canvas-info">Click to zoom • Double-click to reset</div>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <div class="legend" id="legend">
+      <h3>📊 Color Coding</h3>
+      <div class="legend-items">
+        <div class="legend-item">
+          <div class="legend-color" style="background: #ff6b9d"></div>
+          <span>Hot Functions (High CPU)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #ffa500"></div>
+          <span>Active Functions</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #3b82f6"></div>
+          <span>System Functions</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #10b981"></div>
+          <span>I/O Operations</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Processing profiling data...</p>
+  </div>
+
+  <script>
+    let flameGraphData = null;
+    let zoomLevel = 1;
+    let pan = { x: 0, y: 0 };
+    let hoveredBlock = null;
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const tooltip = document.getElementById('tooltip');
+    const loading = document.getElementById('loading');
+
+    // Resize canvas to fit container
+    function resizeCanvas() {
+      const container = canvas.parentElement;
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight || 600;
+    }
+
+    // Initialize
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      if (flameGraphData) draw();
+    });
+
+    resizeCanvas();
+
+    /**
+     * Generate mock profiling data for testing
+     */
+    async function generateMockData() {
+      showLoading(true);
+      try {
+        const response = await fetch('/api/profile/generate-mock', {
+          method: 'POST',
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          await loadGraphData();
+          showNotification('✅ Mock data generated successfully!');
+        }
+      } catch (error) {
+        showNotification(`❌ Error: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    /**
+     * Load live profiling data from server
+     */
+    async function loadLiveData() {
+      showLoading(true);
+      try {
+        // In a real scenario, you'd send actual profiling data
+        // For now, we'll load the latest snapshot
+        await loadGraphData();
+        showNotification('✅ Live data loaded!');
+      } catch (error) {
+        showNotification(`❌ Error: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    /**
+     * Load and display graph data
+     */
+    async function loadGraphData() {
+      try {
+        const graphResponse = await fetch('/api/profile/graph');
+        const metaResponse = await fetch('/api/profile/metadata');
+
+        flameGraphData = await graphResponse.json();
+        const metadata = await metaResponse.json();
+
+        // Update stats
+        document.getElementById('stat-samples').textContent = Math.floor(
+          flameGraphData.value || 0
+        );
+        document.getElementById('stat-nodes').textContent = countNodes(flameGraphData);
+        document.getElementById('stat-duration').textContent =
+          metadata.duration.toFixed(0) + 'ms';
+
+        resetView();
+        draw();
+      } catch (error) {
+        console.error('Error loading graph data:', error);
+      }
+    }
+
+    /**
+     * Count nodes in graph tree
+     */
+    function countNodes(node) {
+      if (!node) return 0;
+      let count = 1;
+      if (node.children && Array.isArray(node.children)) {
+        count += node.children.reduce((sum, child) => sum + countNodes(child), 0);
+      }
+      return count;
+    }
+
+    /**
+     * Draw the flame graph
+     */
+    function draw() {
+      if (!flameGraphData) return;
+
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const padding = 40;
+      const blockHeight = 20;
+      const firstBlockY = 40;
+
+      ctx.save();
+      ctx.translate(pan.x, pan.y);
+      ctx.scale(zoomLevel, 1);
+
+      drawNode(flameGraphData, padding, firstBlockY, canvas.width - 2 * padding, blockHeight);
+
+      ctx.restore();
+
+      // Draw axis labels
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '12px Arial';
+      ctx.textAlign = 'left';
+
+      // X-axis label
+      ctx.fillText('CPU Time (samples)', padding, canvas.height - 10);
+
+      // Y-axis label
+      ctx.save();
+      ctx.translate(15, canvas.height / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = 'center';
+      ctx.fillText('Call Stack Depth', 0, 0);
+      ctx.restore();
+    }
+
+    /**
+     * Recursively draw flame graph nodes
+     */
+    function drawNode(node, x, y, width, height, depth = 0) {
+      if (!node || !node.children || node.children.length === 0) return;
+
+      const totalValue = node.value || 1;
+      let currentX = x;
+
+      node.children.forEach((child) => {
+        const childWidth = (width * child.value) / totalValue;
+        if (childWidth > 0) {
+          // Draw rectangle
+          const color = getColor(child.name, depth);
+          ctx.fillStyle = color;
+          ctx.fillRect(currentX, y, childWidth, height);
+
+          // Draw border
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(currentX, y, childWidth, height);
+
+          // Draw text if wide enough
+          if (childWidth > 40) {
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'left';
+            ctx.globalAlpha = 0.8;
+            const text = child.name.substring(0, Math.floor(childWidth / 7));
+            ctx.fillText(text, currentX + 4, y + 15);
+            ctx.globalAlpha = 1;
+          }
+
+          // Store block info for hover detection
+          if (!canvas.blocks) canvas.blocks = [];
+          canvas.blocks.push({
+            x: currentX,
+            y: y,
+            width: childWidth,
+            height: height,
+            name: child.name,
+            value: child.value,
+            depth: depth,
+          });
+
+          // Recursively draw children
+          drawNode(child, currentX, y + height, childWidth, height, depth + 1);
+
+          currentX += childWidth;
+        }
+      });
+    }
+
+    /**
+     * Get color based on function name
+     */
+    function getColor(name, depth) {
+      const colors = [
+        '#ff6b9d',
+        '#ffa500',
+        '#3b82f6',
+        '#10b981',
+        '#8b5cf6',
+        '#f59e0b',
+        '#06b6d4',
+        '#ec4899',
+      ];
+
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      }
+
+      return colors[Math.abs(hash) % colors.length];
+    }
+
+    /**
+     * Canvas mouse move for tooltips
+     */
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left - pan.x) / zoomLevel;
+      const y = (e.clientY - rect.top);
+
+      hoveredBlock = null;
+      if (canvas.blocks) {
+        for (const block of canvas.blocks) {
+          if (
+            x >= block.x &&
+            x <= block.x + block.width &&
+            y >= block.y &&
+            y <= block.y + block.height
+          ) {
+            hoveredBlock = block;
+            break;
+          }
+        }
+      }
+
+      if (hoveredBlock) {
+        tooltip.style.display = 'block';
+        tooltip.style.left = e.clientX - rect.left + 10 + 'px';
+        tooltip.style.top = e.clientY - rect.top + 10 + 'px';
+        tooltip.innerHTML = `
+          <strong>${hoveredBlock.name}</strong><br/>
+          Samples: ${hoveredBlock.value}<br/>
+          Depth: ${hoveredBlock.depth}
+        `;
+      } else {
+        tooltip.style.display = 'none';
+      }
+    });
+
+    /**
+     * Canvas click to zoom
+     */
+    canvas.addEventListener('click', () => {
+      if (hoveredBlock) {
+        zoomLevel *= 2;
+        pan.x -= hoveredBlock.x * zoomLevel;
+        document.getElementById('stat-zoom').textContent = Math.round(zoomLevel * 100) + '%';
+        draw();
+      }
+    });
+
+    /**
+     * Double click to reset zoom
+     */
+    canvas.addEventListener('dblclick', () => {
+      resetView();
+      draw();
+    });
+
+    /**
+     * Reset pan and zoom
+     */
+    function resetView() {
+      zoomLevel = 1;
+      pan = { x: 0, y: 0 };
+      document.getElementById('stat-zoom').textContent = '100%';
+    }
+
+    /**
+     * Show/hide loading indicator
+     */
+    function showLoading(show) {
+      loading.classList.toggle('show', show);
+    }
+
+    /**
+     * Show notification
+     */
+    function showNotification(message, type = 'success') {
+      console.log(`[${type.toUpperCase()}] ${message}`);
+      // You can enhance this with a toast notification library
+    }
+
+    /**
+     * Toggle legend visibility
+     */
+    function toggleLegend() {
+      const legend = document.getElementById('legend');
+      legend.style.display = legend.style.display === 'none' ? 'block' : 'none';
+    }
+
+    /**
+     * Download graph as SVG
+     */
+    function downloadData() {
+      if (!flameGraphData) {
+        showNotification('No data to download', 'error');
+        return;
+      }
+
+      const json = JSON.stringify(flameGraphData, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `flame-graph-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showNotification('✅ Graph data downloaded!');
+    }
+
+    // Initial load
+    window.addEventListener('load', () => {
+      showNotification('💡 Click "Generate Mock Data" to get started!');
+    });
+  </script>
+</body>
+</html>

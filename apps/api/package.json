@@ -7,7 +7,10 @@
     "dev": "node --env-file=../../.env --dns-result-order=verbatim --import tsx/esm --watch src/server.ts",
     "build": "tsc",
     "start": "node --env-file=../../.env --dns-result-order=verbatim --import tsx/esm src/server.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "profile": "node --env-file=../../.env --dns-result-order=verbatim --import tsx/esm --prof src/server.ts",
+    "profile:flame": "0x --open src/server.ts",
+    "profile:analyze": "node --prof-process isolate-*.log > processed.txt && cat processed.txt"
   },
   "dependencies": {
     "@clerk/express": "^1.0.0",
@@ -31,6 +34,8 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
+    "0x": "^5.7.0",
+    "autocannon": "^7.12.0",
     "@types/multer": "^1.4.12",
     "@types/pdf-parse": "^1.1.4",
     "@types/pg": "^8.18.0",
